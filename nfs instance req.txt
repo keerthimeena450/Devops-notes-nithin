@@ -1,0 +1,110 @@
+nfs instance req:
+- ubuntu
+- t2.micro
+- all traffic
+
+
+run all the commands in nfs node :
+- sudo apt update -y
+- sudo apt install nfs-kernel-server -y
+- sudo mkdir -p /mnt/sak
+- sudo chown -R nobody:nogroup /mnt/sak/
+- sudo vim /etc/exports
+- insert this content to /etc/exports → as below
+--> /mnt/sak *(rw,sync,no_subtree_check)
+  if you face any security issues then use below content
+--> /mnt/sak *(rw,sync,no_subtree_check,insecure)
+- sudo exportfs -a
+- to check exports
+--> sudo exportfs -v or showmount -e
+- sudo systemctl restart nfs-kernel-server
+Step 2 : NFS-Client (in Worker Nodes)
+- sudo apt install nfs-common -y
+- showmount -e  <nfs private IP>→
+Example : showmount -e 172.31.32.58
+vi pv.yml
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-nfs-pv1
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 172.31.40.166 #nfs server private IP
+    path: "/mnt/sak"
+:wq
+vi pvc.yml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-nfs-pv1
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Mi
+:wq
+vi deploy.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: nginx
+  name: nginx-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: nginx
+  template:
+    metadata:
+      labels:
+        run: nginx
+    spec:
+      volumes:
+      - name: www
+        persistentVolumeClaim:
+          claimName: pvc-nfs-pv1
+      containers:
+      - image: nginx
+        name: nginx
+        volumeMounts:
+        - name: www
+          mountPath: /usr/share/nginx/html
+:wq
+run commands in master node :
+vi pv.yml
+    5  vi pvc.yml
+    6  vi deploy.yml
+    7  kubectl aplly -f pv.yml
+    8  kubectl apply -f pv.yml
+    9  kubectl apply -f pvc.yml
+   10  kubectl apply -f deploy.yml
+   11  kubectl get pvc
+   12  kubectl get deploy
+   13  kubectl get all
+   14  clear
+   15  kubectl get all
+   16  kubectl exec -it deployment.apps/nginx-deploy -- /bin/bash
+   17  kubectl get pods
+   18  kubectl delete pod nginx-deploy-795db8dfd6-f5wwh
+   19  kubectl get pods
+   20  kubectl get deploy
+   21  kubectl get pods
+   22  kubectl exec nginx-deploy-795db8dfd6-rtdwl -it -- /bin/bash
+   23  history
+run commands on nfs :
+ls
+    3  touch jsp.txt
+    4  ls
+    5  cd /mnt/sak
+    6  ls
+    7  cat file.txt

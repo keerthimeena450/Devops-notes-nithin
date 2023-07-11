@@ -1,0 +1,211 @@
+  							MAVEN
+-----------------------------------------------------------------------------------------------------------------------
+Maven installation in linux
+1)launch an instance in aws with linux
+2)connect the instance with mobaxterm and go to root user
+3)go to google and search for maven download and copy the link from original website
+4)in linux terminal
+	wget <url> from maven download website
+5)to check wheather it is installed or not click on
+	ls
+6)untar the file first
+	tar -zvxf apache-maven-3.9.2-bin.tar.gz
+7)check weather it is untared click on 
+	ls
+8)change the file name
+	mv apache-maven-3.9.2 Maven
+9)check wheather the file name is chnaged
+	ls
+10)enter the directory
+	cd Maven
+11)check for the files
+	ls
+12)enter into bin directory
+	cd bin
+13)check for the path
+	pwd
+/root/Maven/bin copy this and paste in notepad
+14)come back to root directory
+	cd
+15)check for the hidden file
+	ls -a
+16)edit the file .bashrc
+	nano .bashrc
+	copy the path and paste at the last as
+		export PATH=/root/Maven/bin:$PATH
+exit from the file by typing
+	ctrl+x and y
+17)read the file
+	cat .bashrc
+18)to check weather it is connected or not 
+	mvn --version
+
+19)restart or to activate the file
+	source .bashrc
+20)type 
+	mvn --version___________________________to check weather the file is loaded or not
+21)install java in linux
+	yum install java-11* -y
+22)ckech for for maven
+	mvn --version
+
+-------------------------------------------------------------------------------------------------------------------------
+step 1 :- Open Browser and Search Maven and choose a Official Website of Maven and click on Download
+step 2 :- Copy the Link →
+	wget https://dlcdn.apache.org/maven/maven-3/3.9.2/binaries/apache-maven-3.9.2-bin.tar.gz
+Step 3 : To extract the tar file → tar xvf apache-maven-3.9.2-bin.tar.gz
+Step 4 :Rename the apache-maven-3.9.2 to maven → mv apache-maven-3.9.2 Maven
+Step 5 :- change directory to → cd /root/Maven/bin → Pwd :- /root/Maven/bin
+	Nano ~/.bashrc  → to exit → ctrl + x → y → enter
+	cat ~/.bashrc → it will show like this
+{      # .bashrc
+# User specific aliases and functions
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+export PATH=/root/Maven/bin:$PATH        }
+then come to root directory by using command → cd
+To activate the path : source .bashrc
+step 6 :Install java why because maven is written in java
+	yum install java-11* -y
+	 mvn --version
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sample Maven Project in jar format
+1)Launch an instance in the aws with linux template
+
+2)Install maven in the instance
+
+3)create a new template
+	mvn archetype:generate
+first choose a filter by giving a number 2049
+we have choose a version --> always go for the latest version here we are choosing version 1.4 and enter the number as 8
+enter the groupid or companyname --> jspiders
+enter the artifactId or projectname --> virus
+enter the version --> for now leave as it is
+enter the package name --> for now leave as it is
+confirm properties configuration by typing y
+	we have to BUILD SUCCESS
+
+4)check for the files
+	ls
+we will get the list of files present 
+in this list enter into the following path
+	/root/virus/src/main/java/jspiders
+there we will get a file called --> App.java --> in this file there will be a default hello world program
+come back to the root directory 
+	cd
+Note--> All the default lifecycle steps must be performed in the project directory itself
+
+5)To validate 
+first enter into the project
+	cd virus
+to validate the project structure
+	mvn validate
+we have to get as BUILD SUCCESS by this we can get to know that the validate is successfull
+
+6)To compile
+once the project is validated the next step is compailation
+but before compailation we have to clear the cache memory 
+	mvn clean
+we have to get BUILD SUCCESS by this we can say that all the cache memory is cleaned
+once the cleaning process is done next step is compailation
+	mvn compile
+once compilelation is done it will generate a .class file in the target directory
+then check for the target directory
+	ls
+check whether the .class file present inside target directory by entering into
+	/root/virus/target/classes/jspiders
+then come back to the root directory
+ 	cd
+
+7) To test
+Once after the compilation is done the next step is testing[unit testing, done by dev]
+enter into the project
+	cd virus
+for testing the code[to check weather the source code is working properly or not]
+	mvn test
+we have to get BUILD SUCCESS by this we can conclude that the test is successfull
+to get the report of the test
+	cd target
+	cd surefire-reports
+	cat jspiders.AppTest.txt[this file will be having all the reports of the test conducted]	
+
+8)To create a package
+	mvn package--> by usin this command we are going to generate an ececutable file which is in jar format which will be present in target directory
+we should get BUILD SUCCESS by getting this we can say package is created successfully
+check for the jar file
+	/root/insta/target
+
+9)To verify
+	mvn verify--> it is used to check for the integration test by verifying the build
+we should get BUILD SUCCESS by this we can confirm that the verification is correctly done
+
+10)To install
+	mvn install--> it is going to install our maven project in our system by downloading dependencies in .ms directory
+we should get BUILD SUCCESS by this we can say the installation process in successfull
+go back to root
+	cd
+check for the hidden file
+	ls -a--> here we will find .m2 directory
+check wheather .pom file is present or not in
+	 /root/.m2/repository/meta/insta/1.0-SNAPSHOT
+this .pom file contains all the dependencies
+
+11)To get the reports of the project
+get back to the project directory
+	cd virus
+to generate a site documentation of our project
+	mvn site
+to get the documentation go inside
+	/root/insta/target/site
+in this file we will get all the reports of the our project
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sample Project in war format
+
+1)To prepare a template
+	mvn archetype:generate -DarchetypeArtifactId=maven-archetype-webapp
+enter the groupid
+enter the artifactid
+enter the version(default)
+enter the package(default)
+
+Rest are the same steps as mentioned above
+
+Note:In war format there will not be .class file present in the target directory and in src we will be having only main and as it is web application it will not give a report of the unit test
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Dinteractive Mode for jar format
+
+1)for creating template
+	mvn archetype:generate -DgroupId=testyentra -DartifactId=qtalk -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+this command is used to create a maven project in jar format which is in de-interactive mode
+
+Rest  of the steps are the same
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Dinteractive Mode for war format
+
+1)for creating template
+	mvn archetype:generate -DgroupId=meta -DartifactId=insta -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false
+this command is used to create a maven project in war format which is in de-interactive mode
+
+Rest of the steps are the same
+
+	
+
+
+
+
+
+
+
+

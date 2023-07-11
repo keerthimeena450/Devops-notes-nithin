@@ -1,0 +1,8 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: copy war file in ansible user to tomcat
+      copy:
+        src: /home/ansible/cicd-for-webapp.war(artifactid in pom.xmlfile)
+        dest: /root/apache-tomcat-9.0.76/webapps/

@@ -1,0 +1,82 @@
+pipeline  
+{
+    agent any
+    tools {
+        maven 'maven'
+    }
+    stages {
+        stage('git clone') {
+            steps {
+                git 'https://github.com/ajit40/maven-integration-sak.git'
+            }
+        }
+        stage('compile') {
+            steps {
+                sh "mvn compile"
+            }
+        }
+        stage('test') {
+            steps {
+                sh "mvn test"
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+pipeline  
+{
+    agent any
+    tools {
+        maven 'maven'
+    }
+    stages {
+        stage('git clone') {
+            steps {
+                git 'https://github.com/ajit40/maven-integration-sak.git'
+            }
+        }
+        stage('validate'){
+            steps{
+                sh "mvn validate"
+            }
+        }
+        stage('clean'){
+            steps{
+                sh "mvn clean"
+            }
+        }
+        stage('compile') {
+            steps {
+                sh "mvn compile"
+            }
+        }
+        stage('test') {
+            steps {
+                sh "mvn test"
+            }
+        }
+        stage('package'){
+            steps{
+                sh "mvn package"
+            }
+        }
+        stage('verify'){
+            steps{
+                sh "mvn verify"
+            }
+        }
+        stage('install'){
+            steps{
+                sh "mvn install"
+            }
+        }
+    }
+}

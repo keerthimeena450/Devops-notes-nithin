@@ -1,0 +1,55 @@
+Launch 3 instance
+2 for kubernetes(ubuntu-22.04,t2.medium,all-traffic)
+1 for mongodb,jenkins,docker(ubuntu,t2.large,all-traffic)
+------------------------------------------------------------------------------------------------------------
+Installation steps for mongodb
+	sudo apt update && sudo apt upgrade
+	sudo apt install -y mongodb
+	sudo systemctl status mongodb
+	starting mongo
+	sudo systemctl start mongodb
+	mongo
+	db.createCollection("web")
+	show collections
+exit
+sudo su -
+
+Configuration of Mongo:
+vi /etc/mongodb.conf
+bind_ip = 0.0.0.0 (change ip address)
+port = 27017 (uncomment it port)
+sudo systemctl start mongodb
+-------------------------------------------------------------------------------------------------------------
+Installation of Docker
+	apt install docker.io -y
+	service docker status
+	service docker start
+-------------------------------------------------------------------------------------------------------------
+Installation of Jenkins
+sudo apt update
+sudo apt install maven git wget unzip -y
+wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt-get update
+sudo apt-get install openjdk-11-jdk -y
+sudo apt-get install jenkins -y
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+------------------------------------------------------------------------------------------------------------
+Jenkins Configuration
+	in jenkins we have to install 2 plugins
+1)manage jenkins
+2)plugins
+3)available plugins
+	i)cloudBees Docker Build and Publish
+	ii)Nodejs
+
+In tools:
+1)Nodejs
+	name:nodejs 16.17.0
+Apply and save
+
+1)New item
+2)name:frontend
+3)freestyle project
+4)add git repo
+5)

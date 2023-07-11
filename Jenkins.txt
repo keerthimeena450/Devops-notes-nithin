@@ -1,0 +1,25 @@
+												Jenkins
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1)Launch an instance
+
+2)Connect that instance 
+
+3)In security groups give for type provide HTTP and source Anywhere IPv4 and confirm with protocal call as TCP and port number as 80
+
+4)vi jenkins.sh
+	#!/bin/bash
+sudo yum update -y
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo yum upgrade -y
+sudo amazon-linux-extras install java-openjdk11 -y
+sudo yum install jenkins -y
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+sudo systemctl status jenkins
+sh jenkins.sh
+
+copy the public ip address of the instance and paste in a new tab with <ipaddress>:8080
+
+we will get a jenkins page for passward copy the path in the 

@@ -1,0 +1,104 @@
+terraform
+
+sudo yum install -y yum-utils shadow-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+sudo yum -y install terraform
+
+
+
+access_key:AKIAYJ3AK2EIYUFCF5JN 
+secret access_key: 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
+
+provider "aws" {
+  region     = "ap-south-1"
+  access_key = "AKIAYJ3AK2EIYUFCF5JN"
+  secret_key = "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"
+}
+resource "aws_instance" "terraform_demo" {
+ami = "ami-03cb1380eec7cc118"
+instance_type = "t2.micro"
+key_name = "mumbai"
+count = "3"
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+
+provider "aws" {
+  region     = "ap-south-1"
+  access_key = "AKIAYJ3AK2EIYUFCF5JN"
+  secret_key = "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"
+}
+resource "aws_security_group" "web-node" {
+  name        = "web-node"
+  description = "Web Security Group"
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "all"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "all"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+resource "aws_instance" "terraform_demo" {
+ami = "ami-03cb1380eec7cc118"
+instance_type = "t2.micro"
+key_name = "mumbai"
+security_groups = ["${aws_security_group.web-node.name}"]
+  count         = 1
+}
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+provider "aws" {
+  region     = "ap-south-1"
+  access_key = "AKIAYJ3AK2EIYUFCF5JN"
+  secret_key = "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"
+}
+resource "aws_security_group" "web-node" {
+  name        = "web-node"
+  description = "Web Security Group"
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "all"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "all"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+resource "aws_instance" "terraform_demo" {
+ami = "ami-03cb1380eec7cc118"
+instance_type = "t2.micro"
+key_name = "mumbai"
+security_groups = ["${aws_security_group.web-node.name}"]
+  count         = 1
+user_data = <<-EOF
+#! /bin/bash
+  sudo yum update -y
+  sudo amazon-linux-extras install nginx1 -y
+  sudo systemctl start nginx.service
+  sudo service nginx start
+  EOF
+}
+
+
+
+
+
+
+
+
+
+
+
